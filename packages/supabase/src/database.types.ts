@@ -70,6 +70,152 @@ export type Database = {
         };
         Relationships: [];
       };
+      memberships: {
+        Row: {
+          account_id: string;
+          created_at: string;
+          role: Database["public"]["Enums"]["membership_role"];
+          user_id: string;
+        };
+        Insert: {
+          account_id: string;
+          created_at?: string;
+          role?: Database["public"]["Enums"]["membership_role"];
+          user_id: string;
+        };
+        Update: {
+          account_id?: string;
+          created_at?: string;
+          role?: Database["public"]["Enums"]["membership_role"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "memberships_account_id_fkey";
+            columns: ["account_id"];
+            isOneToOne: false;
+            referencedRelation: "accounts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      locations: {
+        Row: {
+          account_id: string;
+          address: string | null;
+          created_at: string;
+          id: string;
+          metadata: Json | null;
+          name: string;
+          updated_at: string;
+        };
+        Insert: {
+          account_id: string;
+          address?: string | null;
+          created_at?: string;
+          id?: string;
+          metadata?: Json | null;
+          name: string;
+          updated_at?: string;
+        };
+        Update: {
+          account_id?: string;
+          address?: string | null;
+          created_at?: string;
+          id?: string;
+          metadata?: Json | null;
+          name?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "locations_account_id_fkey";
+            columns: ["account_id"];
+            isOneToOne: false;
+            referencedRelation: "accounts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      location_assignments: {
+        Row: {
+          created_at: string;
+          location_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          location_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          location_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "location_assignments_location_id_fkey";
+            columns: ["location_id"];
+            isOneToOne: false;
+            referencedRelation: "locations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      review_requests: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          customer_email: string;
+          customer_name: string | null;
+          id: string;
+          location_id: string;
+          status: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          customer_email: string;
+          customer_name?: string | null;
+          id?: string;
+          location_id: string;
+          status?: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          customer_email?: string;
+          customer_name?: string | null;
+          id?: string;
+          location_id?: string;
+          status?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "review_requests_location_id_fkey";
+            columns: ["location_id"];
+            isOneToOne: false;
+            referencedRelation: "locations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      super_admins: {
+        Row: {
+          created_at: string;
+          id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -78,7 +224,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      membership_role: "owner" | "manager" | "employee";
     };
     CompositeTypes: {
       [_ in never]: never;

@@ -45,3 +45,6 @@ yarn-error.log*
 
 # contentlayer
 .contentlayer/
+
+# scripts
+apps/web/scripts/verify-tenancy.ts
