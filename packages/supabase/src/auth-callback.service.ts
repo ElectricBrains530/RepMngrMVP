@@ -23,7 +23,7 @@ export function createAuthCallbackService(client: SupabaseClient) {
  *
  */
 class AuthCallbackService {
-  constructor(private readonly client: SupabaseClient) {}
+  constructor(private readonly client: SupabaseClient) { }
 
   /**
    * @name verifyTokenHash
@@ -137,6 +137,23 @@ class AuthCallbackService {
     const errorPath = params.errorPath ?? '/auth/callback/error';
 
     const nextUrl = nextUrlPathFromParams ?? params.redirectPath;
+
+    // Validate that the next path is relative or matches the site url
+    // This prevents open redirect vulnerabilities
+    if (nextUrl && nextUrl.startsWith('http')) {
+      try {
+        const url = new URL(nextUrl);
+        // Force relative path if absolute URL is provided
+        // You could also check against allowed domains here
+        return {
+          nextPath: url.pathname + url.search
+        };
+      } catch {
+        return {
+          nextPath: '/'
+        };
+      }
+    }
 
     if (authCode) {
       try {

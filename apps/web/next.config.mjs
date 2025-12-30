@@ -30,12 +30,12 @@ const config = {
   outputFileTracingIncludes: {
     '/*': ['./content/**/*'],
   },
+  reactCompiler: ENABLE_REACT_COMPILER,
+  turbopack: {
+    resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
   experimental: {
     mdxRs: true,
-    reactCompiler: ENABLE_REACT_COMPILER,
-    turbo: {
-      resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
-    },
     optimizePackageImports: [
       'recharts',
       'lucide-react',
@@ -51,9 +51,40 @@ const config = {
       transform: 'lodash/{{member}}',
     },
   },
-  /** We already do linting and typechecking as separate tasks in CI */
-  eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          }
+        ],
+      },
+    ];
+  },
 };
 
 export default config;
@@ -74,13 +105,13 @@ function getRemotePatterns() {
   return IS_PRODUCTION
     ? remotePatterns
     : [
-        {
-          protocol: 'http',
-          hostname: '127.0.0.1',
-        },
-        {
-          protocol: 'http',
-          hostname: 'localhost',
-        },
-      ];
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ];
 }

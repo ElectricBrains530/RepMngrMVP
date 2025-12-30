@@ -39,8 +39,22 @@ export function PersonalAccountSettingsContainer(
   const supportsLanguageSelection = useSupportMultiLanguage();
   const user = usePersonalAccountData(props.userId);
 
-  if (!user.data || user.isPending) {
+  if (user.isPending) {
     return <LoadingOverlay fullPage />;
+  }
+
+  if (user.isError) {
+    return (
+      <div className={'flex w-full flex-col space-y-4 pb-32'}>
+        <div className="p-4 border border-red-500 rounded text-red-500">
+          Error loading profile: {user.error.message}
+        </div>
+      </div>
+    );
+  }
+
+  if (!user.data) {
+    return null;
   }
 
   return (

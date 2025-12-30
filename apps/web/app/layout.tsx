@@ -20,8 +20,8 @@ export default async function RootLayout({
   const className = getClassName(theme);
 
   return (
-    <html lang={language} className={className}>
-      <body>
+    <html lang={language} className={className} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <RootProviders theme={theme} lang={language}>
           {children}
         </RootProviders>
