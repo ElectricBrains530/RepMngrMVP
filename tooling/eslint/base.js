@@ -87,6 +87,14 @@ export default tsEsLint.config(
               importNames: ['Trans'],
               message: 'Please use `@kit/ui/trans` instead',
             },
+            {
+              name: '~/server',
+              message: 'Server-only modules cannot be imported into client components. Use Server Actions or API routes.',
+            },
+            {
+              name: 'apps/web/server',
+              message: 'Server-only modules cannot be imported into client components. Use Server Actions or API routes.',
+            },
           ],
         },
       ],
