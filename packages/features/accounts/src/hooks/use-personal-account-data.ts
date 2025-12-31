@@ -30,10 +30,14 @@ export function usePersonalAccountData(
     `,
       )
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (response.error) {
       throw response.error;
+    }
+
+    if (!response.data) {
+      throw new Error('Account not found (Row is missing in public.accounts). Please contact support or try signing up again.');
     }
 
     return response.data;
@@ -47,10 +51,10 @@ export function usePersonalAccountData(
     refetchOnMount: false,
     initialData: partialAccount?.id
       ? {
-          id: partialAccount.id,
-          name: partialAccount.name,
-          picture_url: partialAccount.picture_url,
-        }
+        id: partialAccount.id,
+        name: partialAccount.name,
+        picture_url: partialAccount.picture_url,
+      }
       : undefined,
   });
 }

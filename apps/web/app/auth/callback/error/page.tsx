@@ -41,6 +41,16 @@ async function AuthCallbackErrorPage(props: AuthCallbackErrorPageProps) {
         signInPath={signInPath}
         redirectPath={redirectPath}
       />
+
+      {(error || code) && (
+        <Alert variant={'destructive'}>
+          <AlertTitle>Debug Info</AlertTitle>
+          <AlertDescription>
+            <p>Error: {error}</p>
+            <p>Code: {code}</p>
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }

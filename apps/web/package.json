@@ -23,6 +23,8 @@
     "supabase:reset": "supabase db reset",
     "supabase:status": "supabase status",
     "supabase:test": "supabase db test",
+    "db:reset-test-users": "pnpm with-env npx tsx scripts/delete-test-users.ts",
+    "db:fix-broken-accounts": "pnpm with-env npx tsx scripts/fix-broken-accounts.ts",
     "supabase:db:lint": "supabase db lint",
     "supabase:deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
     "supabase:typegen": "pnpm run supabase:typegen:packages && pnpm run supabase:typegen:app",
