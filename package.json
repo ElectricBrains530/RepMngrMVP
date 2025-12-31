@@ -35,12 +35,15 @@
   "packageManager": "pnpm@10.18.2",
   "pnpm": {
     "overrides": {
-      "react-is": "19.0.0"
+      "react-is": "19.0.0",
+      "js-yaml": "^4.1.1",
+      "tmp": "^0.2.4",
+      "tar": "^7.5.2"
     }
   },
   "devDependencies": {
     "@manypkg/cli": "^0.25.1",
-    "@turbo/gen": "^2.5.8",
+    "@turbo/gen": "^2.7.2",
     "baseline-browser-mapping": "^2.9.11",
     "cross-env": "^10.1.0",
     "prettier": "^3.6.2",
