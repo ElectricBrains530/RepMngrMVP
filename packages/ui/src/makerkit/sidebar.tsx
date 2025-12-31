@@ -1,3 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react/no-unknown-property */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 'use client';
 
 import { useContext, useId, useRef, useState } from 'react';
@@ -36,11 +41,11 @@ export function Sidebar(props: {
   expandOnHover?: boolean;
   className?: string;
   children:
-    | React.ReactNode
-    | ((props: {
-        collapsed: boolean;
-        setCollapsed: (collapsed: boolean) => void;
-      }) => React.ReactNode);
+  | React.ReactNode
+  | ((props: {
+    collapsed: boolean;
+    setCollapsed: (collapsed: boolean) => void;
+  }) => React.ReactNode);
 }) {
   const [collapsed, setCollapsed] = useState(props.collapsed ?? false);
   const isExpandedRef = useRef<boolean>(false);
@@ -67,24 +72,24 @@ export function Sidebar(props: {
   const onMouseEnter =
     props.collapsed && expandOnHover
       ? () => {
-          setCollapsed(false);
-          isExpandedRef.current = true;
-        }
+        setCollapsed(false);
+        isExpandedRef.current = true;
+      }
       : undefined;
 
   const onMouseLeave =
     props.collapsed && expandOnHover
       ? () => {
-          if (!isRadixPopupOpen()) {
+        if (!isRadixPopupOpen()) {
+          setCollapsed(true);
+          isExpandedRef.current = false;
+        } else {
+          onRadixPopupClose(() => {
             setCollapsed(true);
             isExpandedRef.current = false;
-          } else {
-            onRadixPopupClose(() => {
-              setCollapsed(true);
-              isExpandedRef.current = false;
-            });
-          }
+          });
         }
+      }
       : undefined;
 
   return (

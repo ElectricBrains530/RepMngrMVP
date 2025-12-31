@@ -652,11 +652,17 @@ export function VisitorsChart() {
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value: string) => value.slice(0, 3)}
+              tickFormatter={(value: string) => {
+                const date = new Date(value);
+                return date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                });
+              }}
             />
             <ChartTooltip
               cursor={false}
@@ -702,7 +708,7 @@ export function PageViewsChart() {
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>('desktop');
 
-  const chartData = [
+  const pageViewsData = useMemo(() => [
     { date: '2024-04-01', desktop: 222, mobile: 150 },
     { date: '2024-04-02', desktop: 97, mobile: 180 },
     { date: '2024-04-03', desktop: 167, mobile: 120 },
@@ -794,7 +800,7 @@ export function PageViewsChart() {
     { date: '2024-06-28', desktop: 149, mobile: 200 },
     { date: '2024-06-29', desktop: 103, mobile: 160 },
     { date: '2024-06-30', desktop: 446, mobile: 400 },
-  ];
+  ], []);
 
   const chartConfig = {
     views: {
@@ -812,10 +818,10 @@ export function PageViewsChart() {
 
   const total = useMemo(
     () => ({
-      desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
-      mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0),
+      desktop: pageViewsData.reduce((acc, curr) => acc + curr.desktop, 0),
+      mobile: pageViewsData.reduce((acc, curr) => acc + curr.mobile, 0),
     }),
-    [],
+    [pageViewsData],
   );
 
   return (
@@ -856,7 +862,7 @@ export function PageViewsChart() {
           config={chartConfig}
           className="aspect-auto h-64 w-full"
         >
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={pageViewsData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -877,7 +883,7 @@ export function PageViewsChart() {
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="views"
-                  labelFormatter={(value) => {
+                  labelFormatter={(value: string) => {
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',

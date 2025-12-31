@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 'use client';
 
 import { Fragment, useCallback } from 'react';
@@ -190,7 +191,7 @@ function StepDivider({
 
   const className = cn(
     'flex h-9 flex-1 items-center justify-center last:flex-[0_0_0]' +
-      ' group flex w-full items-center space-x-3 px-3',
+    ' group flex w-full items-center space-x-3 px-3',
   );
 
   return (

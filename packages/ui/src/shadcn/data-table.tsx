@@ -27,6 +27,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   // TODO: remove when https://github.com/TanStack/table/issues/5567 gets fixed
+  /* eslint-disable react-hooks/incompatible-library */
   'use no memo';
 
   const table = useReactTable({
@@ -47,9 +48,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 );
               })}
