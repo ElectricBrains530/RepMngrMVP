@@ -51,16 +51,16 @@ interface HandlerParams<
  */
 export const enhanceRouteHandler = <
   Body,
-  Params extends Config<z.ZodType<Body, z.ZodTypeDef>>,
+  Params extends Config<z.ZodType<Body, any>>,
 >(
   // Route handler function
   handler:
     | ((
-        params: HandlerParams<Params['schema'], Params['auth']>,
-      ) => NextResponse | Response)
+      params: HandlerParams<Params['schema'], Params['auth']>,
+    ) => NextResponse | Response)
     | ((
-        params: HandlerParams<Params['schema'], Params['auth']>,
-      ) => Promise<NextResponse | Response>),
+      params: HandlerParams<Params['schema'], Params['auth']>,
+    ) => Promise<NextResponse | Response>),
   // Parameters object
   params?: Params,
 ) => {

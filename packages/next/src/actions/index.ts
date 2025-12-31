@@ -6,6 +6,7 @@ import type { JwtPayload } from '@supabase/supabase-js';
 
 import { ZodType, z } from 'zod';
 
+
 import { verifyCaptchaToken } from '@kit/auth/captcha/server';
 import { requireUser } from '@kit/supabase/require-user';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
@@ -24,7 +25,7 @@ export function enhanceAction<
     captcha?: boolean;
     schema?: z.ZodType<
       Config['captcha'] extends true ? Args & { captchaToken: string } : Args,
-      z.ZodTypeDef
+      any
     >;
   },
 >(
@@ -71,6 +72,6 @@ export function enhanceAction<
       user = auth.data as UserParam;
     }
 
-    return fn(data, user);
+    return fn(data as any, user);
   };
 }

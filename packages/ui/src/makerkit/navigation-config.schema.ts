@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const RouteMatchingEnd = z
-  .union([z.boolean(), z.function().args(z.string()).returns(z.boolean())])
+  .union([z.boolean(), z.function({ input: z.tuple([z.string()]), output: z.boolean() })])
   .default(false)
   .optional();
 
