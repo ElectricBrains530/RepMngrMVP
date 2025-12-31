@@ -1,8 +1,7 @@
-import { EnvelopeOpenIcon } from '@radix-ui/react-icons';
-import { Mail } from 'lucide-react';
-
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
+import { EnvelopeOpenIcon } from '@radix-ui/react-icons';
+import { Mail } from 'lucide-react';
 
 import { SitePageHeader } from '~/(marketing)/_components/site-page-header';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';

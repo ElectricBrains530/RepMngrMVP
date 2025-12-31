@@ -1,6 +1,5 @@
-import type { JwtPayload } from '@supabase/supabase-js';
-
 import { Header } from '@kit/ui/marketing';
+import type { JwtPayload } from '@supabase/supabase-js';
 
 import { AppLogo } from '~/components/app-logo';
 

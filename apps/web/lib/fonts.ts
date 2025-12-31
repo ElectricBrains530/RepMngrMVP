@@ -20,4 +20,4 @@ const sans = SansFont({
 const heading = sans;
 
 // we export these fonts into the root layout
-export { sans, heading };
+export { heading,sans };

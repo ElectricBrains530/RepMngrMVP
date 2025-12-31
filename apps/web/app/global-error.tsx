@@ -1,12 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-
-import { ArrowLeft, MessageCircle } from 'lucide-react';
-
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 import { Trans } from '@kit/ui/trans';
+import { ArrowLeft, MessageCircle } from 'lucide-react';
+import Link from 'next/link';
 
 import { SiteHeader } from '~/(marketing)/_components/site-header';
 

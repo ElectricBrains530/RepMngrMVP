@@ -1,5 +1,4 @@
 import type { Provider } from '@supabase/supabase-js';
-
 import { z } from 'zod';
 
 const providers: z.ZodType<Provider> = getProviders();

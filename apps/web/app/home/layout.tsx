@@ -1,7 +1,3 @@
-import { use } from 'react';
-
-import { cookies } from 'next/headers';
-
 import {
   Page,
   PageLayoutStyle,
@@ -9,6 +5,8 @@ import {
   PageNavigation,
 } from '@kit/ui/page';
 import { SidebarProvider } from '@kit/ui/shadcn-sidebar';
+import { cookies } from 'next/headers';
+import { use } from 'react';
 
 import { AppLogo } from '~/components/app-logo';
 import { navigationConfig } from '~/config/navigation.config';

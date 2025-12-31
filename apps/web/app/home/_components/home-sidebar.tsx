@@ -1,5 +1,3 @@
-import type { JwtPayload } from '@supabase/supabase-js';
-
 import {
   Sidebar,
   SidebarContent,
@@ -7,6 +5,7 @@ import {
   SidebarHeader,
   SidebarNavigation,
 } from '@kit/ui/shadcn-sidebar';
+import type { JwtPayload } from '@supabase/supabase-js';
 
 import { AppLogo } from '~/components/app-logo';
 import { ProfileAccountDropdownContainer } from '~/components/personal-account-dropdown-container';

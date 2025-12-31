@@ -1,8 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
-
-import { ArrowRightIcon, LayoutDashboard } from 'lucide-react';
-
 import {
   CtaButton,
   FeatureCard,
@@ -13,6 +8,9 @@ import {
   Pill,
 } from '@kit/ui/marketing';
 import { Trans } from '@kit/ui/trans';
+import { ArrowRightIcon, LayoutDashboard } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 import { withI18n } from '~/lib/i18n/with-i18n';
 

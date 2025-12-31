@@ -1,9 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
-import { LogOut, Menu } from 'lucide-react';
-
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
 import {
   DropdownMenu,
@@ -14,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { Trans } from '@kit/ui/trans';
+import { LogOut, Menu } from 'lucide-react';
+import Link from 'next/link';
 
 import { navigationConfig } from '~/config/navigation.config';
 

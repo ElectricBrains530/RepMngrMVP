@@ -1,7 +1,6 @@
+import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 import { Home, User } from 'lucide-react';
 import { z } from 'zod';
-
-import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 
 import pathsConfig from '~/config/paths.config';
 

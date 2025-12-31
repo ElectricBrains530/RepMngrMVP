@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-
 import { createAuthCallbackService } from '@kit/supabase/auth';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
+import { NextRequest, NextResponse } from 'next/server';
 
 import pathsConfig from '~/config/paths.config';
 
