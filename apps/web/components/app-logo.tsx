@@ -13,13 +13,22 @@ function LogoImage({
   height?: number;
 }) {
   return (
-    <Image
-      src="/images/IsleofView_logo_primary_dark.svg"
-      alt="App Logo"
-      width={width}
-      height={height}
-      className={cn('w-[160px] lg:w-[190px]', className)}
-    />
+    <>
+      <Image
+        src="/images/IsleofView_logoblack.svg"
+        alt="App Logo"
+        width={width}
+        height={height}
+        className={cn('w-[160px] lg:w-[190px] dark:hidden', className)}
+      />
+      <Image
+        src="/images/IsleofView_logowhite.svg"
+        alt="App Logo"
+        width={width}
+        height={height}
+        className={cn('hidden w-[160px] lg:w-[190px] dark:block', className)}
+      />
+    </>
   );
 }
 
