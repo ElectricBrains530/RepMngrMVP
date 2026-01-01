@@ -1,14 +1,12 @@
-/* eslint-disable react-hooks/purity */
+
 'use client';
 
-import * as React from 'react';
-
+import { Slot } from '@radix-ui/react-slot';
+import { cva, VariantProps } from 'class-variance-authority';
+import { ChevronDown, PanelLeft } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import { Slot } from '@radix-ui/react-slot';
-import { VariantProps, cva } from 'class-variance-authority';
-import { ChevronDown, PanelLeft } from 'lucide-react';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobile } from '../hooks/use-mobile';
@@ -34,13 +32,14 @@ import {
 } from './tooltip';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '16rem';
-const SIDEBAR_WIDTH_MOBILE = '18rem';
-const SIDEBAR_WIDTH_ICON = '4rem';
-const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+const SIDEBAR_WIDTH = '15rem'; // Standard width (desktop)
+const SIDEBAR_WIDTH_MOBILE = '18rem'; // Wider on mobile
+const SIDEBAR_WIDTH_ICON = '3rem'; // Width when collapsed to icons
+const SIDEBAR_KEYBOARD_SHORTCUT = 'b'; // Cmd+B / Ctrl+B to toggle
 const SIDEBAR_MINIMIZED_WIDTH = SIDEBAR_WIDTH_ICON;
 
+// Define the shape of the Sidebar's state context.
 type SidebarContext = {
   state: 'expanded' | 'collapsed';
   open: boolean;
@@ -51,8 +50,10 @@ type SidebarContext = {
   toggleSidebar: () => void;
 };
 
+// Create the React Context.
 export const SidebarContext = React.createContext<SidebarContext | null>(null);
 
+// Hook to consume the sidebar context easily.
 function useSidebar() {
   const context = React.useContext(SidebarContext);
 
@@ -63,6 +64,8 @@ function useSidebar() {
   return context;
 }
 
+// The main Provider component that wraps the application (or sidebar area).
+// It manages the state (open/closed) and handles responsiveness.
 const SidebarProvider: React.FC<
   React.ComponentProps<'div'> & {
     defaultOpen?: boolean;
@@ -79,15 +82,21 @@ const SidebarProvider: React.FC<
   children,
   ...props
 }) => {
+    // Check if we are on a mobile device.
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = React.useState(false);
+
+    // Read configuration for how the sidebar should collapse (icon vs offcanvas).
     const collapsibleStyle = process.env.NEXT_PUBLIC_SIDEBAR_COLLAPSIBLE_STYLE;
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
+    // Internal state for the sidebar's open status.
+    // 'defaultOpen' sets the initial state.
     const [_open, _setOpen] = React.useState(defaultOpen);
+
+    // Controlled state pattern: use the prop if provided, otherwise internal state.
     const open = openProp ?? _open;
 
+    // Handler to update open state and persist it to a cookie.
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         if (setOpenProp) {
@@ -96,18 +105,18 @@ const SidebarProvider: React.FC<
 
         _setOpen(value);
 
-        // This sets the cookie to keep the sidebar state.
+        // Save state to a cookie so the server remembers it on reload.
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       },
       [setOpenProp, open],
     );
 
-    // Helper to toggle the sidebar.
+    // Toggle function that handles both mobile and desktop logic.
     const toggleSidebar = React.useCallback(() => {
       return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
     }, [isMobile, setOpen, setOpenMobile]);
 
-    // Adds a keyboard shortcut to toggle the sidebar.
+    // Keyboard shortcut listener (Cmd+B or Ctrl+B).
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
@@ -123,8 +132,7 @@ const SidebarProvider: React.FC<
       return () => window.removeEventListener('keydown', handleKeyDown);
     }, [toggleSidebar]);
 
-    // We add a state so that we can do data-state="expanded" or "collapsed".
-    // This makes it easier to style the sidebar with Tailwind classes.
+    // Derived state for data attributes (useful for CSS styling).
     const state = open ? 'expanded' : 'collapsed';
 
     const contextValue = React.useMemo<SidebarContext>(
@@ -140,6 +148,7 @@ const SidebarProvider: React.FC<
       [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
     );
 
+    // Calculate effective width based on state and config (e.g. 0px if offcanvas, 3rem if icon).
     const sidebarWidth = !open
       ? collapsibleStyle === 'icon'
         ? SIDEBAR_WIDTH_ICON
@@ -176,11 +185,13 @@ const SidebarProvider: React.FC<
 
 SidebarProvider.displayName = 'SidebarProvider';
 
+// The main Sidebar container component.
+// It handles layout, responsiveness (mobile sheet vs desktop sidebar), and variant styles.
 const Sidebar: React.FC<
   React.ComponentPropsWithRef<'div'> & {
-    side?: 'left' | 'right';
-    variant?: 'sidebar' | 'floating' | 'inset' | 'ghost';
-    collapsible?: 'offcanvas' | 'icon' | 'none';
+    side?: 'left' | 'right'; // Which side of the screen?
+    variant?: 'sidebar' | 'floating' | 'inset' | 'ghost'; // Visual style
+    collapsible?: 'offcanvas' | 'icon' | 'none'; // Collapse behavior
   }
 > = ({
   side = 'left',
@@ -191,8 +202,10 @@ const Sidebar: React.FC<
   ref,
   ...props
 }) => {
+    // Consume the context to know current state (mobile/desktop, open/closed).
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
+    // Strategy 1: Non-collapsible sidebar (simple column).
     if (collapsible === 'none') {
       return (
         <div
@@ -211,6 +224,7 @@ const Sidebar: React.FC<
       );
     }
 
+    // Strategy 2: Mobile Sidebar (uses a Sheet/Drawer component).
     if (isMobile) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
@@ -237,6 +251,10 @@ const Sidebar: React.FC<
       );
     }
 
+    // Strategy 3: Desktop Sidebar.
+    // This is more complex because it often involves TWO divs:
+    // 1. A "Ghost" div that takes up space in the document flow (so main content pushes over).
+    // 2. A "Fixed" div that actually contains the sidebar UI (so it stays pinned while scrolling).
     return (
       <div
         ref={ref}
@@ -246,7 +264,7 @@ const Sidebar: React.FC<
         data-variant={variant}
         data-side={side}
       >
-        {/* This is what handles the sidebar gap on desktop */}
+        {/* Helper div: reserves space in the layout so content doesn't go under the sidebar */}
         <div
           className={cn(
             'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear',
@@ -260,6 +278,7 @@ const Sidebar: React.FC<
             },
           )}
         />
+        {/* The Actual Sidebar: Fixed position, contains the content */}
         <div
           className={cn(
             'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
@@ -292,6 +311,8 @@ const Sidebar: React.FC<
 
 Sidebar.displayName = 'Sidebar';
 
+// A button to trigger the sidebar toggle (Open/Close).
+// Can be placed anywhere in the app.
 const SidebarTrigger: React.FC<React.ComponentProps<typeof Button>> = ({
   className,
   onClick,
@@ -324,6 +345,8 @@ const SidebarTrigger: React.FC<React.ComponentProps<typeof Button>> = ({
 };
 SidebarTrigger.displayName = 'SidebarTrigger';
 
+// A "Rail" is a thin vertical strip that allows resizing the sidebar.
+// It sits on the edge of the sidebar.
 const SidebarRail: React.FC<React.ComponentProps<'button'>> = ({
   className,
   ...props
@@ -338,9 +361,12 @@ const SidebarRail: React.FC<React.ComponentProps<'button'>> = ({
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
+        // Styles for the rail: hidden by default, visible on hover or when resizing.
         'hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex',
+        // Cursor styles to indicate resizing is possible.
         'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
         '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
+        // Hover effects.
         'hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
@@ -352,6 +378,8 @@ const SidebarRail: React.FC<React.ComponentProps<'button'>> = ({
 };
 SidebarRail.displayName = 'SidebarRail';
 
+// The "Inset" is the main content area of your page, usually adjacent to the sidebar.
+// It's called "Inset" because it often has a subtle background or shadow to look "inset" relative to the sidebar.
 const SidebarInset: React.FC<React.ComponentProps<'main'>> = ({
   className,
   ...props
@@ -369,6 +397,7 @@ const SidebarInset: React.FC<React.ComponentProps<'main'>> = ({
 };
 SidebarInset.displayName = 'SidebarInset';
 
+// A styled Input for use inside the Sidebar (search, filtering, etc.).
 const SidebarInput: React.FC<React.ComponentPropsWithRef<typeof Input>> = ({
   className,
   ...props
@@ -386,6 +415,7 @@ const SidebarInput: React.FC<React.ComponentPropsWithRef<typeof Input>> = ({
 };
 SidebarInput.displayName = 'SidebarInput';
 
+// Header section for the sidebar (e.g. Logo, Team Switcher).
 const SidebarHeader: React.FC<React.ComponentPropsWithRef<'div'>> = ({
   className,
   ...props
@@ -400,6 +430,7 @@ const SidebarHeader: React.FC<React.ComponentPropsWithRef<'div'>> = ({
 };
 SidebarHeader.displayName = 'SidebarHeader';
 
+// Footer section for the sidebar (e.g. User Profile).
 const SidebarFooter: React.FC<React.ComponentProps<'div'>> = ({
   className,
   ...props
@@ -414,6 +445,7 @@ const SidebarFooter: React.FC<React.ComponentProps<'div'>> = ({
 };
 SidebarFooter.displayName = 'SidebarFooter';
 
+// A separator line for grouping items visually.
 const SidebarSeparator: React.FC<React.ComponentProps<typeof Separator>> = ({
   className,
   ...props
@@ -428,6 +460,7 @@ const SidebarSeparator: React.FC<React.ComponentProps<typeof Separator>> = ({
 };
 SidebarSeparator.displayName = 'SidebarSeparator';
 
+// The main scrollable area of the sidebar where menu items go.
 const SidebarContent: React.FC<React.ComponentProps<'div'>> = ({
   className,
   ...props
@@ -445,6 +478,7 @@ const SidebarContent: React.FC<React.ComponentProps<'div'>> = ({
 };
 SidebarContent.displayName = 'SidebarContent';
 
+// A logical grouping of menu items.
 const SidebarGroup: React.FC<React.ComponentProps<'div'>> = ({
   className,
   ...props
@@ -459,6 +493,7 @@ const SidebarGroup: React.FC<React.ComponentProps<'div'>> = ({
 };
 SidebarGroup.displayName = 'SidebarGroup';
 
+// The label for a group (e.g. "Platform", "Settings").
 const SidebarGroupLabel: React.FC<
   React.ComponentProps<'div'> & { asChild?: boolean }
 > = ({ className, asChild = false, ...props }) => {
@@ -478,6 +513,7 @@ const SidebarGroupLabel: React.FC<
 };
 SidebarGroupLabel.displayName = 'SidebarGroupLabel';
 
+// An action button inside a group (e.g. "+" to add a project).
 const SidebarGroupAction: React.FC<
   React.ComponentProps<'button'> & { asChild?: boolean }
 > = ({ className, asChild = false, ...props }) => {
@@ -490,6 +526,7 @@ const SidebarGroupAction: React.FC<
         'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
+        // Hidden when sidebar is collapsed.
         'group-data-[collapsible=icon]:hidden',
         className,
       )}
@@ -499,6 +536,7 @@ const SidebarGroupAction: React.FC<
 };
 SidebarGroupAction.displayName = 'SidebarGroupAction';
 
+// Wrapper for the content within a group.
 const SidebarGroupContent: React.FC<React.ComponentProps<'div'>> = ({
   className,
   ...props
@@ -511,6 +549,7 @@ const SidebarGroupContent: React.FC<React.ComponentProps<'div'>> = ({
 );
 SidebarGroupContent.displayName = 'SidebarGroupContent';
 
+// A generic menu list (ul).
 const SidebarMenu: React.FC<React.ComponentProps<'ul'>> = ({
   className,
   ...props
@@ -526,6 +565,7 @@ const SidebarMenu: React.FC<React.ComponentProps<'ul'>> = ({
 );
 SidebarMenu.displayName = 'SidebarMenu';
 
+// A single item in the menu (li).
 const SidebarMenuItem: React.FC<React.ComponentProps<'li'>> = ({
   className,
   ...props
@@ -541,6 +581,7 @@ const SidebarMenuItem: React.FC<React.ComponentProps<'li'>> = ({
 );
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
+// Variants for styling menu buttons calling cva() from class-variance-authority.
 const sidebarMenuButtonVariants = cva(
   'peer/menu-button ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:ring-primary active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
   {
@@ -563,6 +604,7 @@ const sidebarMenuButtonVariants = cva(
   },
 );
 
+// The actual clickable button for a menu item. Supports variants and tooltips.
 const SidebarMenuButton: React.FC<
   React.ComponentProps<'button'> & {
     asChild?: boolean;
@@ -619,6 +661,7 @@ const SidebarMenuButton: React.FC<
 
 SidebarMenuButton.displayName = 'SidebarMenuButton';
 
+// An action button attached to a menu item (e.g. a "..." dropdown).
 const SidebarMenuAction: React.FC<
   React.ComponentProps<'button'> & {
     asChild?: boolean;
@@ -648,6 +691,7 @@ const SidebarMenuAction: React.FC<
 };
 SidebarMenuAction.displayName = 'SidebarMenuAction';
 
+// A badge (e.g. count) to display next to a menu item.
 const SidebarMenuBadge: React.FC<React.ComponentProps<'div'>> = ({
   className,
   ...props
@@ -668,14 +712,18 @@ const SidebarMenuBadge: React.FC<React.ComponentProps<'div'>> = ({
 );
 SidebarMenuBadge.displayName = 'SidebarMenuBadge';
 
+// A loading skeleton for menu items.
 const SidebarMenuSkeleton: React.FC<
   React.ComponentProps<'div'> & {
     showIcon?: boolean;
   }
 > = ({ className, showIcon = false, ...props }) => {
   // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
+  // Use a fixed width on server (hydration safe) and randomize on client.
+  const [width, setWidth] = React.useState('70%');
+
+  React.useEffect(() => {
+    setWidth(`${Math.floor(Math.random() * 40) + 50}%`);
   }, []);
 
   return (
@@ -704,6 +752,7 @@ const SidebarMenuSkeleton: React.FC<
 };
 SidebarMenuSkeleton.displayName = 'SidebarMenuSkeleton';
 
+// Submenu container (for nested items).
 const SidebarMenuSub: React.FC<React.ComponentProps<'ul'>> = ({
   className,
   ...props
@@ -720,12 +769,14 @@ const SidebarMenuSub: React.FC<React.ComponentProps<'ul'>> = ({
 );
 SidebarMenuSub.displayName = 'SidebarMenuSub';
 
+// Submenu item.
 const SidebarMenuSubItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<'li'>
 >(({ ...props }, ref) => <li ref={ref} {...props} />);
 SidebarMenuSubItem.displayName = 'SidebarMenuSubItem';
 
+// Submenu button (link).
 const SidebarMenuSubButton: React.FC<
   React.ComponentProps<'a'> & {
     asChild?: boolean;
@@ -754,24 +805,30 @@ const SidebarMenuSubButton: React.FC<
 };
 SidebarMenuSubButton.displayName = 'SidebarMenuSubButton';
 
+// The recursive component that builds the actual navigation menu from the config.
 export function SidebarNavigation({
   config,
 }: React.PropsWithChildren<{
   config: SidebarConfig;
 }>) {
+  // Get the current URL path to determine which menu item is active.
   const currentPath = usePathname() ?? '';
   const { open } = useSidebar();
 
   return (
     <>
+      {/* Iterate over top-level routes from the config */}
       {config.routes.map((item, index) => {
         const isLast = index === config.routes.length - 1;
 
+        // Case 1: The item is just a visual divider.
         if ('divider' in item) {
           return <SidebarSeparator key={`divider-${index}`} />;
         }
 
+        // Case 2: The item is a group with children (e.g. "Dashboards", "Configuration").
         if ('children' in item) {
+          // Helper: Wraps content in a Collapsible if the group is collapsible.
           const Container = (props: React.PropsWithChildren) => {
             if (item.collapsible) {
               return (
@@ -787,6 +844,7 @@ export function SidebarNavigation({
             return props.children;
           };
 
+          // Helper: Wraps the *content* logic for animation.
           const ContentContainer = (props: React.PropsWithChildren) => {
             if (item.collapsible) {
               return <CollapsibleContent>{props.children}</CollapsibleContent>;
@@ -798,6 +856,12 @@ export function SidebarNavigation({
           return (
             <Container key={`collapsible-${index}`}>
               <SidebarGroup key={item.label}>
+                {/* 
+                  Group Label Logic:
+                  1. If Collapsible: Render a trigger button with a chevron.
+                  2. If Not Collapsible: Just render text.
+                  We use <If> components to conditionally render these based on state.
+                */}
                 <If
                   condition={item.collapsible}
                   fallback={
@@ -814,6 +878,7 @@ export function SidebarNavigation({
                   </SidebarGroupLabel>
                 </If>
 
+                {/* Optional Action Button (e.g. "+ Add New") next to label */}
                 <If condition={item.renderAction}>
                   <SidebarGroupAction title={item.label}>
                     {item.renderAction}
@@ -823,7 +888,9 @@ export function SidebarNavigation({
                 <SidebarGroupContent>
                   <SidebarMenu>
                     <ContentContainer>
+                      {/* Recursively render children of this group */}
                       {item.children.map((child, childIndex) => {
+                        // Helper to wrap child items in their own Collapsible state if needed.
                         const Container = (props: React.PropsWithChildren) => {
                           if ('collapsible' in child && child.collapsible) {
                             return (
@@ -853,7 +920,9 @@ export function SidebarNavigation({
                           return props.children;
                         };
 
+                        // Logic to render the clickable trigger for an item.
                         const TriggerItem = () => {
+                          // Sub-Case 2a: Child is ITSELF a collapsible group (nested menu).
                           if ('collapsible' in child && child.collapsible) {
                             return (
                               <CollapsibleTrigger asChild>
@@ -893,9 +962,11 @@ export function SidebarNavigation({
                             );
                           }
 
+                          // Sub-Case 2b: Standard Leaf Link (e.g. "/dashboard/settings").
                           const path = 'path' in child ? child.path : '';
                           const end = 'end' in child ? child.end : false;
 
+                          // Check if this link is currently active.
                           const isActive = isRouteActive(
                             path,
                             currentPath,
@@ -939,6 +1010,7 @@ export function SidebarNavigation({
                               <TriggerItem />
 
                               <ContentContainer>
+                                {/* Recursion: Render sub-menus (3rd level deep) */}
                                 <If condition={child.children}>
                                   {(children) => (
                                     <SidebarMenuSub
@@ -1008,6 +1080,7 @@ export function SidebarNavigation({
                 </SidebarGroupContent>
               </SidebarGroup>
 
+              {/* Add a separator after the group unless it's the last one. */}
               <If condition={!open && !isLast}>
                 <SidebarSeparator />
               </If>
