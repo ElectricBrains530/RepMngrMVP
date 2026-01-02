@@ -29,11 +29,14 @@ export function AuroraBackground() {
                         <stop offset="100%" stopColor="#2BBBC0" stopOpacity="0.4" />
                     </linearGradient>
 
-                    {/* Secondary Blue Gradient */}
+                    {/* Secondary Blue Gradient - Made comparable to Green */}
                     <linearGradient id="cool-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-                        {/* #5B8DEF (Cool Blue) */}
-                        <stop offset="0%" stopColor="#5B8DEF" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="#2BBBC0" stopOpacity="0.0" />
+                        {/* #2BBBC0 (Teal - connecting to green) */}
+                        <stop offset="0%" stopColor="#2BBBC0" stopOpacity="0.3" />
+                        {/* #5B8DEF (Cool Blue - Core) */}
+                        <stop offset="50%" stopColor="#5B8DEF" stopOpacity="0.4" />
+                        {/* #5B8DEF (Cool Blue - Fade) */}
+                        <stop offset="100%" stopColor="#5B8DEF" stopOpacity="0.1" />
                     </linearGradient>
 
                     {/* Warm Hints (Distant) */}
@@ -82,16 +85,16 @@ export function AuroraBackground() {
                     />
 
                     {/* 
-             Layer 3: Cool Blue Depth (Botttom/Side)
-             Adds atmospheric depth without competing
+             Layer 3: Cool Blue Depth (More prominent now)
+             Shifted slightly to balance the greens
           */}
                     <ellipse
-                        cx="900"
-                        cy="900"
-                        rx="600"
-                        ry="400"
+                        cx="600"
+                        cy="800"
+                        rx="700"
+                        ry="500"
                         fill="url(#cool-blue)"
-                        transform="rotate(-20 900 900)"
+                        transform="rotate(-10 600 800)"
                     />
 
                     {/* 
