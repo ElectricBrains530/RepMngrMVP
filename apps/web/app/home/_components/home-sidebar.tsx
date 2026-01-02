@@ -1,3 +1,5 @@
+'use client';
+
 // Import necessary Sidebar components from the shared UI library.
 // These are reusable components designed to build a standard sidebar layout.
 import {
@@ -6,6 +8,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarNavigation,
+  useSidebar,
 } from '@kit/ui/shadcn-sidebar';
 // Import the JwtPayload type from Supabase to strictly type the user object.
 import type { JwtPayload } from '@supabase/supabase-js';
@@ -20,13 +23,13 @@ import { navigationConfig } from '~/config/navigation.config';
 import { Tables } from '~/lib/database.types';
 
 // Define the HomeSidebar component.
-// It accepts 'props' containing:
-// 1. account: The current user's account details (optional).
-// 2. user: The authenticated user's JWT payload (required).
+// It acts as a client component to react to sidebar state changes.
 export function HomeSidebar(props: {
   account?: Tables<'accounts'>;
   user: JwtPayload;
 }) {
+  const { open } = useSidebar();
+
   return (
     // The main Sidebar container.
     // 'collapsible="icon"' means the sidebar can shrink to just show icons,
@@ -38,9 +41,9 @@ export function HomeSidebar(props: {
       */}
       <SidebarHeader className={'h-16 justify-center'}>
         <div className={'flex items-center justify-between space-x-2'}>
-          <div>
+          <div className="flex w-full justify-center">
             {/* The AppLogo component displays your branding/logo. */}
-            <AppLogo className={'max-w-full'} />
+            <AppLogo collapsed={!open} className={'max-w-full'} />
           </div>
         </div>
       </SidebarHeader>
