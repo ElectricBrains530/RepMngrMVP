@@ -1,0 +1,70 @@
+{
+  "blog": "Blogg",
+  "blogSubtitle": "Nyheter och uppdateringar om plattformen",
+  "documentation": "Dokumentation",
+  "documentationSubtitle": "Handledningar och guider för att komma igång med plattformen",
+  "faq": "Vanliga frågor",
+  "faqSubtitle": "Vanliga frågor om plattformen",
+  "pricing": "Priser",
+  "pricingSubtitle": "Prisplaner och betalningsalternativ",
+  "backToBlog": "Tillbaka till bloggen",
+  "noPosts": "Inga inlägg hittades",
+  "blogPaginationNext": "Nästa sida",
+  "blogPaginationPrevious": "Föregående sida",
+  "readMore": "Läs mer",
+  "contactFaq": "Om du har några frågor, vänligen kontakta oss",
+  "contact": "Kontakt",
+  "about": "Om oss",
+  "product": "Produkt",
+  "legal": "Juridiskt",
+  "termsOfService": "Användarvillkor",
+  "termsOfServiceDescription": "Våra villkor",
+  "cookiePolicy": "Cookiepolicy",
+  "cookiePolicyDescription": "Vår cookiepolicy och hur vi använder cookies",
+  "privacyPolicy": "Integritetspolicy",
+  "privacyPolicyDescription": "Vår integritetspolicy och hur vi använder dina uppgifter",
+  "contactDescription": "Kontakta oss vid frågor eller feedback",
+  "contactHeading": "Skicka ett meddelande",
+  "contactSubheading": "Vi återkommer till dig så snart som möjligt",
+  "contactName": "Ditt namn",
+  "contactEmail": "Din e-postadress",
+  "contactMessage": "Ditt meddelande",
+  "sendMessage": "Skicka meddelande",
+  "contactSuccess": "Ditt meddelande har skickats",
+  "contactError": "Ett fel uppstod när ditt meddelande skickades",
+  "contactSuccessDescription": "Vi har tagit emot ditt meddelande och återkommer så snart som möjligt",
+  "contactErrorDescription": "Ett fel uppstod när ditt meddelande skickades. Försök igen senare",
+  "footerDescription": "Här kan du lägga till en beskrivning av ditt företag eller din produkt",
+  "contactSubtitle": "Det är enkelt att kontakta oss",
+  "email": "E-post",
+  "supportHeading": "Support",
+  "supportDescription": "Behöver du hjälp? Skicka ett e-postmeddelande så återkommer vi så snart som möjligt.",
+  "contactSupport": "Kontakta support",
+  "hero": {
+    "pill": "Det ledande SaaS-startpaketet för ambitiösa utvecklare",
+    "title": "Den ultimata SaaS-starten <br /> för ditt nästa projekt",
+    "subtitle": "Bygg och lansera en SaaS snabbare än någonsin med nästa generations SaaS-startpaket. Lansera din SaaS på dagar, inte månader."
+  },
+  "features": {
+    "heading": "Det ultimata SaaS-startpaketet",
+    "subheading": "Släpp loss din kreativitet och bygg din SaaS snabbare än någonsin med Makerkit.",
+    "allInOne": "Allt-i-ett-lösning",
+    "dashboard": {
+      "label": "Vacker panel",
+      "description": "Makerkit erbjuder en vacker panel för att hantera din SaaS-verksamhet."
+    },
+    "authentication": {
+      "label": "Autentisering",
+      "description": "Makerkit erbjuder en mängd olika leverantörer för att låta dina användare logga in."
+    },
+    "multiTenancy": {
+      "label": "Multi-tenancy",
+      "description": "Multi-tenant-medlemskap för din SaaS-verksamhet."
+    },
+    "billing": {
+      "label": "Fakturering",
+      "description": "Makerkit stöder flera betalningsgateways för att debitera dina kunder."
+    }
+  },
+  "copyright": "© Copyright {{year}} {{product}}. Alla rättigheter förbehållna."
+}

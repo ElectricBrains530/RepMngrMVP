@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@kit/ui/dropdown-menu';
 import { If } from '@kit/ui/if';
+import { SubMenuLanguageToggle } from '@kit/ui/language-switcher';
 import { SubMenuModeToggle } from '@kit/ui/mode-toggle';
 import { ProfileAvatar } from '@kit/ui/profile-avatar';
 import { Trans } from '@kit/ui/trans';
@@ -76,7 +77,7 @@ export function PersonalAccountDropdown({
           className ?? '',
           {
             ['active:bg-secondary/50 items-center gap-x-4 rounded-md' +
-            ' hover:bg-secondary p-2 transition-colors']: showProfileName,
+              ' hover:bg-secondary p-2 transition-colors']: showProfileName,
           },
         )}
       >
@@ -151,6 +152,8 @@ export function PersonalAccountDropdown({
         <If condition={features.enableThemeToggle}>
           <SubMenuModeToggle />
         </If>
+
+        <SubMenuLanguageToggle />
 
         <DropdownMenuSeparator />
 

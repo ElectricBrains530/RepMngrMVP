@@ -40,5 +40,31 @@
   "supportHeading": "Support",
   "supportDescription": "Need help? Send us an email and we will get back to you as soon as possible.",
   "contactSupport": "Contact Support",
+  "hero": {
+    "pill": "The leading SaaS Starter Kit for ambitious developers",
+    "title": "The ultimate SaaS Starter <br /> for your next project",
+    "subtitle": "Build and Ship a SaaS faster than ever before with the next-gen SaaS Starter Kit. Ship your SaaS in days, not months."
+  },
+  "features": {
+    "heading": "The ultimate SaaS Starter Kit",
+    "subheading": "Unleash your creativity and build your SaaS faster than ever with Makerkit.",
+    "allInOne": "All-in-one solution",
+    "dashboard": {
+      "label": "Beautiful Dashboard",
+      "description": "Makerkit provides a beautiful dashboard to manage your SaaS business."
+    },
+    "authentication": {
+      "label": "Authentication",
+      "description": "Makerkit provides a variety of providers to allow your users to sign in."
+    },
+    "multiTenancy": {
+      "label": "Multi Tenancy",
+      "description": "Multi tenant memberships for your SaaS business."
+    },
+    "billing": {
+      "label": "Billing",
+      "description": "Makerkit supports multiple payment gateways to charge your customers."
+    }
+  },
   "copyright": "© Copyright {{year}} {{product}}. All Rights Reserved."
 }
