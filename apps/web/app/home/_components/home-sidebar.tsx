@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarNavigation,
+  SidebarRail,
   useSidebar,
 } from '@kit/ui/shadcn-sidebar';
 // Import the JwtPayload type from Supabase to strictly type the user object.
@@ -74,6 +75,9 @@ export function HomeSidebar(props: {
           account={props.account}
         />
       </SidebarFooter>
+
+      {/* The SidebarRail allows collapsing the sidebar by clicking on the edge */}
+      <SidebarRail />
     </Sidebar>
   );
 }

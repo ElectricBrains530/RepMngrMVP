@@ -39,6 +39,13 @@ const routes = [
         label: 'common:routes.profile',
         path: pathsConfig.app.profileSettings,
         Icon: <User className={iconClasses} />,
+        collapsible: true, // Enable nesting
+        children: [
+          {
+            label: 'Contact',
+            path: '/contact',
+          },
+        ],
       },
     ],
   },
