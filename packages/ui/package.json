@@ -117,6 +117,7 @@
     "./enhanced-data-table": "./src/makerkit/data-table.tsx",
     "./language-selector": "./src/makerkit/language-selector.tsx",
     "./language-switcher": "./src/makerkit/language-switcher.tsx",
+    "./flag-icons": "./src/makerkit/flag-icons.tsx",
     "./stepper": "./src/makerkit/stepper.tsx",
     "./cookie-banner": "./src/makerkit/cookie-banner.tsx",
     "./card-button": "./src/makerkit/card-button.tsx",

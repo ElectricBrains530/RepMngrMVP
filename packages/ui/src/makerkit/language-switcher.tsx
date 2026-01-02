@@ -13,16 +13,18 @@ import {
     DropdownMenuSubTrigger,
 } from '../shadcn/dropdown-menu';
 
+import { SEFlag, USFlag } from './flag-icons';
+
 const LANGUAGES = [
     {
         code: 'en',
         label: 'English',
-        flag: '🇺🇸',
+        flag: <USFlag className="h-4 w-4" />,
     },
     {
         code: 'sv',
         label: 'Svenska',
-        flag: '🇸🇪',
+        flag: <SEFlag className="h-4 w-4" />,
     },
 ];
 
